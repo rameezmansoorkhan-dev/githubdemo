@@ -12,7 +12,13 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    ecmaFeatures: { jsx: true },   // add this
+  },
   rules: {
-    // Add your custom rules here
+    'no-unused-vars': 'off',
   },
 };
