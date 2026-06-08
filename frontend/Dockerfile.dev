@@ -1,0 +1,21 @@
+# frontend/Dockerfile.dev
+# Development image: runs the Vite dev server with HMR.
+# Source is bind-mounted via docker-compose, so we only bake in deps here.
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies first for better layer caching.
+# Only package manifests are copied, so deps are re-installed
+# only when they actually change — not on every source edit.
+COPY package*.json ./
+RUN npm ci
+
+# Source is mounted at runtime (see docker-compose), so we don't COPY it here.
+# Vite's port (matches frontend :5173 in the project context).
+EXPOSE 5173
+
+# --host 0.0.0.0 is REQUIRED: without it Vite binds to localhost
+# inside the container and is unreachable from the host.
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
